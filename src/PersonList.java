@@ -45,6 +45,14 @@ public class PersonList extends java.awt.List {
                 .collect(Collectors.toList());
     }
 
+    private int getAverageofAges(Predicate<Person> condition) {
+        List<Integer> filteredAge = this.list.stream()
+                .filter(condition)
+                .map(Person::getAge)
+                .collect(Collectors.toList());
+        return filteredAge.stream().reduce(0 , Integer::sum)/filteredAge.size();
+    }
+
     private String printFiltered(List<Person> filteredList) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("\tName\t\t|\t Age \t|\tGender\n------------------------------------------\n");
@@ -60,10 +68,12 @@ public class PersonList extends java.awt.List {
         Person one = new Person("John", 35, "male");
         Person two = new Person("Jane", 26, "female");
         Person three = new Person("Kyle", 45, "male");
-        PersonList testList = new PersonList(3);
+        Person four = new Person("Anna", 50, "female");
+        PersonList testList = new PersonList(5);
         testList.addPerson(one);
         testList.addPerson(two);
         testList.addPerson(three);
+        testList.addPerson(four);
 
         System.out.println(testList.toString());
         System.out.println("Average age: " + testList.getAverageOfAges() + "\n");
@@ -71,5 +81,6 @@ public class PersonList extends java.awt.List {
         List<Person> filteredList =
                 testList.getPersonsByCondition(person -> person.getGender().equals("female") && person.getAge()>18);
         System.out.println(testList.printFiltered(filteredList));
+        System.out.println("Average age: " + testList.getAverageofAges(person -> person.getGender().equals("female") && person.getAge()>18));
     }
 }
